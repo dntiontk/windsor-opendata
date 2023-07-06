@@ -11,8 +11,6 @@ import (
 	"strings"
 )
 
-type categoryName string
-
 const (
 	feedUrl = "https://opendata.citywindsor.ca/RSS"
 
