@@ -3,11 +3,12 @@ package main
 import (
 	"crypto/tls"
 	"encoding/xml"
-	"fmt"
+	"flag"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -38,7 +39,12 @@ const (
 	uncategorized           = "uncategorized"
 )
 
+var dataDir string
+
 func main() {
+	flag.StringVar(&dataDir, "dir", "data", "specify the desination data directory")
+	flag.Parse()
+
 	client := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -136,8 +142,9 @@ func main() {
 	}
 
 	for k, v := range categories {
+		log.Printf("updating (%d) files for %s", len(v), k)
 		for _, i := range v {
-			fp := fmt.Sprintf("../data/%s/%s", k, i.Title)
+			fp := filepath.Join(dataDir, k, i.Title)
 			out, err := os.Create(fp)
 			if err != nil {
 				log.Fatal(err)
@@ -155,7 +162,7 @@ func main() {
 			}
 		}
 	}
-	fmt.Println("done")
+	log.Println("complete")
 }
 
 type RSS struct {
