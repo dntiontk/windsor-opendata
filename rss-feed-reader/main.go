@@ -158,22 +158,6 @@ func main() {
 	fmt.Println("done")
 }
 
-func (il ItemList) String() string {
-	var out string
-	for _, i := range il {
-		out += fmt.Sprintf("\n\t%s", i.Title)
-	}
-	return out
-}
-
-func (rss *RSS) String() string {
-	var out string
-	for _, item := range rss.Channel.Item {
-		out += fmt.Sprintf("- Text: %s\n  Title: %s\n  Link: %s\n  PubDate: %s\n", item.Text, item.Title, item.Link, item.PubDate)
-	}
-	return out
-}
-
 type RSS struct {
 	XMLName xml.Name `xml:"rss"`
 	Text    string   `xml:",chardata"`
