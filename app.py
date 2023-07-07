@@ -5,7 +5,7 @@ from os import path
 
 
 base_path = "data/precipitation/"
-ambassador_path = "ambassador_sanitized.csv"
+ambassador_path = "01 Ambassador_sanitized.csv"
 df = pd.read_csv(path.join(base_path, ambassador_path))
 df.set_index("DateTime", inplace=True)
 df.index = pd.DatetimeIndex(df.index)
