@@ -1,0 +1,3 @@
+Location: 3005 Grand Marais Rd E
+Gauge: Grand Marais PS
+Date: 2023-07-07

@@ -1,0 +1,3 @@
+Location: 42.283408, -82.953172
+Gauge: Pillette 
+Date: 2023-07-07

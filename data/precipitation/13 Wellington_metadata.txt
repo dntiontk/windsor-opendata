@@ -1,0 +1,3 @@
+Location: 42.297849, -83.042942
+Gauge: Wellington Rain Gauge
+Date: 2023-07-07
