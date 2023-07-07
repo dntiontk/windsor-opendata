@@ -1,0 +1,3 @@
+Location: 42.331393, -82.927624
+Gauge: Pontiac
+Date: 2023-07-06

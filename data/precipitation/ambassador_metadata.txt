@@ -1,0 +1,3 @@
+Location: 42.254691, -83.080744
+Gauge: Ambassador PS Rain Gauge
+Date: 2023-07-06

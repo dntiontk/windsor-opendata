@@ -1,0 +1,3 @@
+Location: 290 Drouillard Rd
+Gauge: Drouillard Rd.
+Date: 2023-07-06
