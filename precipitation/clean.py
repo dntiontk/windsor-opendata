@@ -25,7 +25,13 @@ args = parser.parse_args()
 
 
 def main():
-    # instantiate data frame list
+    """
+    Process precipitation datasets from CSV files.
+
+    Reads CSV files from a source directory, performs data cleaning operations,
+    combines the cleaned data into a single DataFrame, and writes it to a CSV file.
+
+    """
     df_list = []
     # get all the csv files in source directory
     raw_files = [f for _, _, files in walk(args.source) for f in files if ".csv" in f]
