@@ -1,3 +1,0 @@
-Location: 42.291463, -83.014204
-Gauge: Howard Grade 
-Date: 2023-07-07
