@@ -20,7 +20,7 @@ We have provided simple Python scripts to assist in cleaning and preprocessing t
 
 ## RSS Feed Reader
 
-We have developed a Go-based RSS feed reader that retrieves the latest updates from the City of Windsor's open data catalogue feed. It automatically organizes the content and ensures the datasets in this repository are up to date.
+We have developed a Go-based RSS feed reader that retrieves the latest updates from the City of Windsor's open data catalogue feed. It automatically organizes the content and ensures the datasets in this repository are up to date. The reader runs once a week automatically, and on all changes to the main branch.
 
 ## Contributing
 
