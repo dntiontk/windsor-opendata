@@ -46,19 +46,9 @@ def main():
     combined = pd.concat(df_list, ignore_index=True)
     # set the index to 'DateTime'
     combined.set_index("DateTime", inplace=True)
-    # pivot the dataframe on 'Daily Accumulation' and 'Rainfall Total' against 'Gauge'
-    pivot_df = pd.pivot_table(
-        combined,
-        values=["Daily Accumulation", "Rainfall Total"],
-        index="DateTime",
-        columns="Gauge",
-    )
-    # set the columns to 'Daily Accumulation' and 'Rainfall Total' per 'Gauge'
-    pivot_df.columns = [f"{col[0]} - {col[1]}" for col in pivot_df.columns]
-    # sort the data on index
-    pivot_df.sort_index(inplace=True)
+    combined.sort_index(inplace=True)
     # write to file
-    pivot_df.to_csv(path.join(args.destination, "windsor-precipitation.csv"))
+    combined.to_csv(path.join(args.destination, "windsor-precipitation.csv"))
 
 
 def collect_dataframes(files):
