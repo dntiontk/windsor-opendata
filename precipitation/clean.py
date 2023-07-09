@@ -32,48 +32,57 @@ def main():
     combines the cleaned data into a single DataFrame, and writes it to a CSV file.
 
     """
-    df_list = []
-    # get all the csv files in source directory
-    raw_files = [f for _, _, files in walk(args.source) for f in files if ".csv" in f]
-    # for each file in source
-    for f in raw_files:
-        src_file = path.join(args.source, f)
-        print("processing {}".format(src_file))
-        # extract metadata from csv as base64 encoded string
-        meta = extract_meta(src_file)
-        # read in the csv file
-        df = pd.read_csv(src_file, skiprows=2)
-        # drop unnamed columns
-        df = drop_unnamed_columns(df)
-        # convert index to datetime
-        df["DateTime"] = pd.to_datetime(df["DateTime"], format="%m/%d/%Y %H:%M")
-        df.set_index("DateTime", inplace=True)
-        df.index = pd.DatetimeIndex(df.index)
-        # add column for location based on metadata
-        df["Gauge Metadata"] = meta
-        # add to dataframe list
-        df_list.append(df)
 
-    # combine dataframes
-    print("combining {} dataframes".format(len(df_list)))
-    df = pd.concat(df_list)
-    # sort data
-    df.sort_index(inplace=True)
+    # get all the csv files in source directory
+    raw_files = [
+        path.join(d, x)
+        for d, _, files in walk(args.source)
+        for x in files
+        if x.endswith(".csv")
+    ]
+    # collect dataframes and add the gauge name as a column
+    df_list = collect_dataframes(raw_files)
+    # concatenate dataframes
+    combined = pd.concat(df_list, ignore_index=True)
+    # set the index to 'DateTime'
+    combined.set_index("DateTime", inplace=True)
+    # pivot the dataframe on 'Daily Accumulation' and 'Rainfall Total' against 'Gauge'
+    pivot_df = pd.pivot_table(
+        combined,
+        values=["Daily Accumulation", "Rainfall Total"],
+        index="DateTime",
+        columns="Gauge",
+    )
+    # set the columns to 'Daily Accumulation' and 'Rainfall Total' per 'Gauge'
+    pivot_df.columns = [f"{col[0]} - {col[1]}" for col in pivot_df.columns]
+    # sort the data on index
+    pivot_df.sort_index(inplace=True)
     # write to file
-    df.to_csv(path.join(args.destination, "windsor-precipitation.csv"))
+    pivot_df.to_csv(path.join(args.destination, "windsor-precipitation.csv"))
+
+
+def collect_dataframes(files):
+    dfs = []
+    for f in files:
+        gauge_name = extract_gauge(f)
+        # read in the csv file
+        df = pd.read_csv(
+            f, skiprows=2, parse_dates=["DateTime"], date_format="%m/%d/%Y %H:%M"
+        )
+        df = drop_unnamed_columns(df)
+        df["Gauge"] = gauge_name
+        dfs.append(df)
+    return dfs
 
 
 def clean_header_whitespace(header: str) -> str:
     return header.split('",')[0].strip('"').split(",,")[0]
 
 
-def extract_meta(raw: str) -> str:
+def extract_gauge(raw: str) -> str:
     with open(raw, "r") as f:
         head = [next(f) for _ in range(2)]
-        location = clean_header_whitespace(head[0]).split(":")[1].strip()
-        gauge = clean_header_whitespace(head[1]).split(":")[1].strip()
-        meta = json.dumps({"location": location, "gauge": gauge})
-        return b64encode(meta.encode("utf-8")).decode("utf-8")
+        return clean_header_whitespace(head[1]).split(":")[1].strip()
 
 
 def drop_unnamed_columns(df: pd.DataFrame) -> pd.DataFrame:
