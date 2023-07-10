@@ -2,17 +2,14 @@
 
 This repository contains datasets from the City of Windsor's open data catalogue, along with automation to keep the datasets up to date, data cleaning scripts, and dashboards built using Dash.
 
-## Installation
-
-N/A
-
-## Usage
-
-Not yet determined.
-
 ## Data Sources
 
 The datasets included in this repository are sourced from the [City of Windsor Open Data Catalogue](https://opendata.citywindsor.ca/). They provide a wide range of information about the city, including election results, precipitation data, yard waste service requests, land parcels, etc.
+
+## Cleaned Data
+
+Data that has been preprocessed and cleaned is added to individual directories with more information about that given dataset. The following are currently available:
+- [precipitation](precipitation/.)
 
 ## Data Cleaning Scripts
 
