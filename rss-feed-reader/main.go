@@ -42,7 +42,7 @@ const (
 var dataDir string
 
 func main() {
-	flag.StringVar(&dataDir, "dir", "data", "specify the desination data directory")
+	flag.StringVar(&dataDir, "dir", "raw", "specify the desination data directory")
 	flag.Parse()
 
 	client := &http.Client{
