@@ -2,9 +2,8 @@
 
 import argparse
 from os import path, walk
-import json
-from base64 import b64encode
 import pandas as pd
+import re
 
 parser = argparse.ArgumentParser()
 
@@ -22,6 +21,9 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
+
+
+lat_lon_pattern = r"^([-+]?\d+\.\d+), ([-+]?\d+\.\d+)$"
 
 
 def main():
@@ -55,18 +57,44 @@ def collect_dataframes(files):
     dfs = []
     for f in files:
         gauge_name = extract_gauge(f)
+        location = extract_loc(f)
+        if location in loc_map:
+            location = loc_map[location]
+        match = re.match(lat_lon_pattern, location)
+        lat = float(match.group(1))
+        lon = float(match.group(2))
+
         # read in the csv file
         df = pd.read_csv(
             f, skiprows=2, parse_dates=["DateTime"], date_format="%m/%d/%Y %H:%M"
         )
         df = drop_unnamed_columns(df)
         df["Gauge"] = gauge_name
+        df["Lat"] = lat
+        df["Lon"] = lon
+
         dfs.append(df)
     return dfs
 
 
+loc_map = {
+    "Riverside at Caron, Windsor, ON N9A 6W7": "42.317658, -83.048579",
+    "290 Drouillard Rd": "42.314937, -83.036363",
+    "3005 Grand Marais Rd E": "42.292000, -82.978780",
+    "2355 Lambton St": "42.261649, -83.046723",
+    "4155 Ojibway Pkwy": "42.282390, -83.082769",
+    "1840 Provincial Rd": "42.256100, -82.970750",
+}
+
+
 def clean_header_whitespace(header: str) -> str:
     return header.split('",')[0].strip('"').split(",,")[0]
+
+
+def extract_loc(raw: str) -> str:
+    with open(raw, "r") as f:
+        head = [next(f) for _ in range(2)]
+        return clean_header_whitespace(head[0]).split(":")[1].strip()
 
 
 def extract_gauge(raw: str) -> str:
