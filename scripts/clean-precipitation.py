@@ -49,6 +49,7 @@ def main():
     # set the index to 'DateTime'
     combined.set_index("DateTime", inplace=True)
     combined.sort_index(inplace=True)
+    combined.sort_values(by=["DateTime", "Gauge"], ascending=[True, True], inplace=True)
     # write to file
     combined.to_csv(path.join(args.destination, "windsor-precipitation.csv"))
 
