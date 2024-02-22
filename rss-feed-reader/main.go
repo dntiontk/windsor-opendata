@@ -106,7 +106,7 @@ func main() {
 			categories[precipitation] = append(categories[precipitation], item)
 		case strings.Contains(item.Title, "Transit Windsor Bus Routes"):
 			categories[transitWindsorBusRoutes] = append(categories[transitWindsorBusRoutes], item)
-		case strings.Contains(item.Title, "Street Centreline"):
+		case strings.Contains(item.Title, "Street Centreline"), strings.Contains(item.Title, "Street Centerline"):
 			categories[streetCentreline] = append(categories[streetCentreline], item)
 		case strings.Contains(item.Title, "Playgrounds"):
 			categories[playgrounds] = append(categories[playgrounds], item)
@@ -122,7 +122,7 @@ func main() {
 			categories[snowRemoval] = append(categories[snowRemoval], item)
 		case strings.Contains(item.Title, "Skunk_"):
 			categories[skunkInspection] = append(categories[skunkInspection], item)
-		case strings.Contains(item.Title, "Sidewalk_"), strings.Contains(item.Title, "Shoulder_"), strings.Contains(item.Title, "Road_"):
+		case strings.Contains(item.Title, "Sidewalk_"), strings.Contains(item.Title, "Sidewalks_"), strings.Contains(item.Title, "Shoulder_"), strings.Contains(item.Title, "Road_"):
 			categories[roadsAndSidewalks] = append(categories[roadsAndSidewalks], item)
 		case strings.Contains(item.Title, "Rodent_"):
 			categories[rodentExtermination] = append(categories[rodentExtermination], item)
